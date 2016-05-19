@@ -1,0 +1,11 @@
+cd /media/sf_Linux/AGRF_CAGRF11237_C80GLANXX/mapped/bam/sorted/
+for file in *.bam
+do
+	cd cnvnator
+	#/media/sf_Linux/bin/CNVnator_v0.3.2/src/cnvnator -root ${file}.root -tree ../$file
+	/media/sf_Linux/bin/CNVnator_v0.3.2/src/cnvnator -root ${file}.root -his 50 -d scaffolds
+	/media/sf_Linux/bin/CNVnator_v0.3.2/src/cnvnator -root ${file}.root -stat 50
+	/media/sf_Linux/bin/CNVnator_v0.3.2/src/cnvnator -root ${file}.root -partition 50
+	/media/sf_Linux/bin/CNVnator_v0.3.2/src/cnvnator -root ${file}.root -call 50 > ${file}.cnv.50bp.txt
+	cd ..
+done

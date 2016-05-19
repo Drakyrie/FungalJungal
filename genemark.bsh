@@ -1,0 +1,8 @@
+cd lengthsorted
+for file in 10*_C
+do
+	cd $file
+	cd K77
+	../../../../gmes_petap/gmes_petap.pl --ES --fungi --sequence first_contig.fasta
+	cd ../../
+done

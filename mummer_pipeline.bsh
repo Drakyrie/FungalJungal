@@ -1,0 +1,23 @@
+#cd pranav_graph
+#for file in *_C.fa
+#do
+	#cd $file	
+	#cd K77
+	#../../../../MUMmer3.23/mummer -mum -b -c ../../../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta final_contigs.fasta > mummer.mums
+	#../../../../MUMmer3.23/mummerplot -postscript -p mummer mummer.mums
+	#../../../../MUMmer3.23/nucmer -maxmatch -c 100 -p nucmer ../../../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta final_contigs.fasta
+	
+	cd DPini/denovo/K99
+	#../../../../MUMmer3.23/nucmer -maxmatch -c 100 -p nucmer ../../../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta  final_contigs.fasta -p Dpini
+	#../../../../MUMmer3.23/mummerplot --png --layout --filter -p Dpini Dpini.delta
+	#../../../../MUMmer3.23/mummerplot --png --layout --filter -p Dpini_12 -r scaffold_12 Dpini.delta
+	../../../../MUMmer3.23/mummerplot --png --layout --filter --coverage -p Dpini_12_cov -r scaffold_12 Dpini.delta
+
+
+	#../../MUMmer3.23/nucmer -maxmatch -c 100 scaffold_12.fa $file -p $file
+	#../../MUMmer3.23/mummerplot -S --png --layout --filter -p $file.snp ${file}.delta
+
+	#../../../../MUMmer3.23/show-coords -r -c -l Dpini.delta > nucmer.coords
+	#../../../../MUMmer3.23/show-snps -C nucmer.delta > nucmer.snp
+	#cd ../../
+#done

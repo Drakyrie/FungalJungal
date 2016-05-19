@@ -1,0 +1,4 @@
+cd DPini
+export PATH=/home/asim/project/nzgl01318/scratch/Dothi/MUMmer3.23/:$PATH
+#export PATH=/home/asim/project/nzgl01318/scratch/Dothi/icebert-pblat-ed0ac17/:$PATH
+../../AlignGraph/AlignGraph/AlignGraph --read1 DPini.r1.fasta --read2 DPini.r2.fasta --contig denovo/K99/final_contigs.fasta --genome ../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta --distanceLow 100 --distanceHigh 1500 --extendedContig extendedContigs.fa --remainingContig remainingContigs.fa --fastMap

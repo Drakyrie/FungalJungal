@@ -1,0 +1,1 @@
+../rsicnv/rsicnv rsi -f ../Dotse1_AssemblyScaffolds_Repeatmasked.fasta -b mapped/bam/sorted/6_COLN_C80GLANXX_GCCAATAT_L001_.at.r1.trimmed.paired.fq.sorted.bam -c scaffold_12 -o test.txt

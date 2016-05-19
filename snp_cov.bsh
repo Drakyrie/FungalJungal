@@ -1,0 +1,6 @@
+cd mapped/bam/sorted/readgrouped
+for file in *filtered.vcf
+do
+	bedtools coverage -a ../../../../../Dotse1_exons.gff -b $file > ${file}.cov
+done
+

@@ -1,0 +1,7 @@
+export PATH=$PATH:/home/asim/project/nzgl01318/scratch/Dothi/VelvetOptimiser-2.2.5
+mkdir velvet
+cd lengthsorted
+for file in *r1.trimmed.paired* 
+do
+VelvetOptimiser.pl -s 69 -e 111 -x 8 -d ../velvet/${file:0:${#file}-47} -f '-fastq -separate -shortPaired '$file' '${file:0:${#file}-20}'r2.trimmed.paired.fq -short '${file:0:${#file}-9}'single.fq'
+done

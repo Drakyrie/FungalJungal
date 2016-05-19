@@ -1,0 +1,12 @@
+#cd lengthsorted
+#for file in *_C
+#for file in 1_*_C
+#do
+	#cd $file	
+	#cd K77
+	cd DPini/denovo/K99/
+	#../../../../augustus.2.5.5/bin/augustus --AUGUSTUS_CONFIG_PATH=/home/asim/project/nzgl01318/scratch/Dothi/augustus.2.5.5/config/ --species=aspergillus_fumigatus unaligned_contigs.fasta > augustus_output
+	python ../../../python_scripts/gff2fa.py	
+	blastx -db ../../../../blastdb/nr -query predicted_genes_seq.fasta -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore sscinames" -num_alignments 1 -out predicted_genes_blast.out	
+	cd ../../
+#done

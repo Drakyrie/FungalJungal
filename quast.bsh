@@ -1,0 +1,8 @@
+#cd lengthsorted
+cd velvet
+#for file in *_C
+#do
+	#mkdir quast/$file	
+	#python ../../quast-3.2/quast.py -o ./quast/$file -R ../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta -G ../../Dotse1_GeneCatalog_genes_20100818.gff --eukaryote ${file}/K79/final_contigs.fasta ${file}/K83/final_contigs.fasta ${file}/K87/final_contigs.fasta ${file}/K91/final_contigs.fasta ${file}/K95/final_contigs.fasta ${file}/K99/final_contigs.fasta
+#done
+python /media/sf_Linux/bin/quast-4.0/quast.py -o ./quast/ -R ../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta --eukaryote 10_GRE1_C/contigs.fa 11_GUA1_C/contigs.fa 12_GUA2_C/contigs.fa 13_NZE2_C/contigs.fa 14_NZE8_C/contigs.fa 15_RUS1_C/contigs.fa 16_SAF4_C/contigs.fa 17_SLV1_C/contigs.fa 18_USA12_C/contigs.fa 1_ALP3_C/contigs.fa 2_AUS4_C/contigs.fa 3_BHU1_C/contigs.fa 4_CAN3_C/contigs.fa 5_CHI17_C/contigs.fa 6_COLN_C/contigs.fa 7_COLS_C/contigs.fa 8_DEN1_C/contigs.fa 9_ECU13_C/contigs.fa

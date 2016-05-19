@@ -1,0 +1,12 @@
+cd mapped/bam/sorted/readgrouped
+for file in *.bam
+do
+	#java -jar ../../../../../GATK/GenomeAnalysisTK.jar -T HaplotypeCaller -R ../../../../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta --sample_ploidy 2 -ERC GVCF -I $file -o ${file}.diploid.g.vcf
+	java -jar ../../../../../GATK/GenomeAnalysisTK.jar -T GenotypeGVCFs -R ../../../../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta -V ${file}.diploid.g.vcf -o ${file}.diploid.vcf
+done
+#for file in *.diploid.vcf
+#do
+	#java -jar ../../../../../GATK/GenomeAnalysisTK.jar -T VariantFiltration -R ../../../../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta -V $file --filterExpression "QD < 2.0 || FS > 60.0 || MQ < 40.0" --filterName "my_snp_filter" -o ${file}.filtered.vcf
+#Q20 filter
+	#java -jar ../../../../../GATK/GenomeAnalysisTK.jar -T VariantFiltration -R ../../../../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta -V ${file}.filtered.vcf -G_filter "GQ < 20.0" -G_filterName lowGQ -o ${file}.Q20.vcf  
+#done

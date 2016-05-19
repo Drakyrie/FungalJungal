@@ -1,0 +1,60 @@
+#!/bin/bash
+#mkdir adaptertrimmed
+#mkdir qualitytrimmed
+#mkdir lengthsorted
+#for file in *R1*
+#for file in 10_GRE1*R1*
+#do	
+	#fastq-mcf -o adaptertrimmed/${file:0:${#file}-11}.at.r1 -o adaptertrimmed/${file:0:${#file}-11}.at.r2 ../contams_for_rev.fa $file ${file:0:${#file}-11}R2.fastq.gz  #takes each file, adapter trims and removes last 11 char and adds new suffix and puts in adapter trimmed folder 
+	#file=${file:0:${#file}-11}.at
+	#SolexaQA++ dynamictrim -h 20 adaptertrimmed/${file}.r1 adaptertrimmed/${file}.r2
+	#mv adaptertrimmed/${file}.r1.trimmed qualitytrimmed/
+	#mv adaptertrimmed/${file}.r2.trimmed qualitytrimmed/
+	#SolexaQA++ lengthsort -l 50 qualitytrimmed/${file}.r1.trimmed qualitytrimmed/${file}.r2.trimmed
+	#mv qualitytrimmed/${file}.r1.trimmed.paired lengthsorted/
+	#mv qualitytrimmed/${file}.r2.trimmed.paired lengthsorted/
+	#mv qualitytrimmed/${file}.r1.trimmed.single lengthsorted/
+#done
+#make all lengthsorted files end with .fq for denovo
+#bowtie2-build -f ../Dotse1_AssemblyScaffolds_Repeatmasked.fasta dothi
+#mkdir mapped
+#cd lengthsorted
+#for file in *
+#do
+#	mv $file ${file}.fq
+#done
+#for file in *r1.trimmed.paired* 
+#for file in *10_GRE1*paired1*
+#do
+#	bowtie2 --sensitive --end-to-end -x ../dothi -1 ${file} -2 ${file:0:${#file}-19}2.trimmed.paired.fq -U ${file:0:${#file}-9}single.fq -S ../mapped/${file}.sam
+#done
+#cd ..
+#cd mapped
+#mkdir bam
+#mkdir bam/sorted
+#mkdir coverage
+#for file in * 
+#for file in 10_GRE*
+#for file in *.sam
+#do
+	#samtools view -b -S $file -o bam/${file:0:${#file}-3}bam
+	#samtools sort bam/${file:0:${#file}-3}bam bam/sorted/${file:0:${#file}-3}sorted
+#	cd lengthsorted
+#	for dir in ${file:0:${#file}-26}*
+#	do
+#	bedtools genomecov -ibam ../bam/sorted/${file:0:${#file}-3}sorted.bam -g $dir/K77/unaligned_contgs.fasta > ../coverage/${file:0:${#file}-3}hist	
+	#bedtools genomecov -ibam bam/sorted/${file:0:${#file}-3}sorted.bam -g ../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta > coverage/${file:0:${#file}-3}.hist
+#	done
+#	cd ..
+#done
+cd mapped/bam/sorted
+#mkdir ../windowcov
+#mkdir ../locicov 
+#for file in 10_GRE*
+for file in *.bam
+do
+	#bedtools coverage -a ../../../dothi_windows.bed -b $file > ../windowcov/${file}.windowcov
+	#bedtools coverage -d -a ../../../../Dotse1_FrozenGeneCatalog2013_07_03_CDS_coordinates.bed -b $file > ../../../locicov/${file}.perbaselocicov	
+	bedtools coverage -d -a ../../../tubulin.bed -b $file > tubulinseq/${file}.perbaselocicov
+done
+

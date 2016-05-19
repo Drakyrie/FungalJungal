@@ -1,0 +1,19 @@
+cd dothistromin_genes
+for gene in *.txt
+do
+	cd ../mapped/bam/sorted
+	count=1	
+	rm *.bcf
+	for file in *.bam
+	do
+		while read p
+		do
+			samtools mpileup -r $p -f ../../../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta $file | bcftools view -cg - >> ${count}.bcf
+		done <../../../dothistromin_genes/$gene
+		count=$count+1
+	done
+	python bcf2fasta.py > ../../../dothistromin_genes/${gene}.fasta
+	cd ../../../dothistromin_genes
+done
+
+

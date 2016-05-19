@@ -1,0 +1,6 @@
+#!/bin/bash
+for file in *
+do
+	samtools index $file	
+done
+

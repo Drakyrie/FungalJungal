@@ -1,0 +1,9 @@
+mkdir unaligned_contigs_mapping
+cd unaligned_contigs_mapping
+bowtie2-build -f ../lengthsorted/1_ALP3_C/K77/unaligned_contigs.fasta 1_ALP
+bowtie2 --sensitive --end-to-end -x 1_ALP -1 ../lengthsorted/1_ALP3_C80GLANXX_ATCACGAT_L001_.at.r1.trimmed.paired.fq -2 ../lengthsorted/1_ALP3_C80GLANXX_ATCACGAT_L001_.at.r2.trimmed.paired.fq -U ../lengthsorted/1_ALP3_C80GLANXX_ATCACGAT_L001_.at.r1.trimmed.single.fq -S 1_ALP_unaligned_contigs.sam
+samtools view -b -S 1_ALP_unaligned_contigs.sam -o 1_ALP_unaligned_contigs.bam
+samtools sort 1_ALP_unaligned_contigs.bam 1_ALP_unaligned_contigs.sorted.bam
+bedtools genomecov -ibam 1_ALP_unaligned_contigs.sorted.bam -g ../lengthsorted/1_ALP3_C/K77/unaligned_contigs.fasta > ../coverage/1_ALP_unaligned_contigs.hist	
+
+

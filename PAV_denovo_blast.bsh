@@ -1,0 +1,11 @@
+cd lengthsorted
+for file in *_C
+do
+	cd $file
+	cd K77
+	#makeblastdb -dbtype 'nucl' -in final_contigs.fasta -out ${file}_db
+	#blastn -db ${file}_db -query ../../../../all_genes_CDS.fasta -outfmt "7" -num_alignments 1 -out present_absent_genes.out
+	python ../../../python_scripts/denovo_blast_parse_PAV.py
+	cd ../../
+done	
+	 

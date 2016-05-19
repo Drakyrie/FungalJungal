@@ -1,0 +1,43 @@
+#!/bin/bash
+mkdir adaptertrimmed
+mkdir qualitytrimmed
+mkdir lengthsorted
+
+#quality trimming
+for file in *R1*
+do	
+	fastq-mcf -o adaptertrimmed/${file:0:${#file}-11}.at.r1 -o adaptertrimmed/${file:0:${#file}-11}.at.r2 ../contams_for_rev.fa $file ${file:0:${#file}-11}R2.fastq.gz  #takes each file, adapter trims and removes last 11 char and adds new suffix and puts in adapter trimmed folder 
+	file=${file:0:${#file}-11}.at
+	SolexaQA++ dynamictrim -h 20 adaptertrimmed/${file}.r1 adaptertrimmed/${file}.r2
+	mv adaptertrimmed/${file}.r1.trimmed qualitytrimmed/
+	mv adaptertrimmed/${file}.r2.trimmed qualitytrimmed/
+	SolexaQA++ lengthsort -l 50 qualitytrimmed/${file}.r1.trimmed qualitytrimmed/${file}.r2.trimmed
+	mv qualitytrimmed/${file}.r1.trimmed.paired lengthsorted/
+	mv qualitytrimmed/${file}.r2.trimmed.paired lengthsorted/
+	mv qualitytrimmed/${file}.r1.trimmed.single lengthsorted/
+done
+
+#bowtie mapping
+bowtie2-build -f ../Dotse1_AssemblyScaffolds_Repeatmasked.fasta dothi
+mkdir mapped
+cd lengthsorted
+#make all lengthsorted files end with .fq for denovo
+for file in *
+do
+	mv $file ${file}.fq
+done
+for file in *r1.trimmed.paired* 
+do
+	bowtie2 --sensitive --end-to-end -x ../dothi -1 ${file} -2 ${file:0:${#file}-19}2.trimmed.paired.fq -U ${file:0:${#file}-9}single.fq -S ../mapped/${file}.sam
+done
+cd ..
+
+#file conversions sam > bam
+cd mapped
+mkdir bam
+mkdir bam/sorted
+for file in *.sam
+do
+	samtools view -b -S $file -o bam/${file:0:${#file}-3}bam
+	samtools sort bam/${file:0:${#file}-3}bam bam/sorted/${file:0:${#file}-3}sorted
+done

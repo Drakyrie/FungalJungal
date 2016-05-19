@@ -1,0 +1,33 @@
+cd mapped/bam/sorted/readgrouped
+#for file in *.bam
+#do
+#java -jar ../../../../../GATK/GenomeAnalysisTK.jar -T HaplotypeCaller -R ../../../../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta --sample_ploidy 1 -ERC GVCF -I $file -o ${file}.g.vcf
+#done
+
+#java -jar ../../../../../GATK/GenomeAnalysisTK.jar -T GenotypeGVCFs -R ../../../../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta -V mygvcfs.list -o combined.vcf
+
+#java -jar ../../../../../GATK/GenomeAnalysisTK.jar -T VariantsToBinaryPed -R ../../../../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta -mgq 0 -V combined.vcf -m metadata.fam -bed output.bed -bim output.bim -fam output.fam
+ 
+#for file in *bam
+#do
+	#java -jar ../../../../../GATK/GenomeAnalysisTK.jar -T GenotypeGVCFs -R ../../../../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta -V ${file}.g.vcf -o ${file}.vcf
+	#bedtools coverage -a ../../../../../dothi_exon.bed -b ${file}.vcf > ${file}.exonsnpcov
+#done
+
+#hard filter out SNPS
+for file in *.bam.vcf
+do
+	#java -jar ../../../../../GATK/GenomeAnalysisTK.jar -T SelectVariants -R ../../../../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta -V combined.vcf -selectType SNP -o raw_snps.vcf
+	#java -jar ../../../../../GATK/GenomeAnalysisTK.jar -T VariantFiltration -R ../../../../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta -V $file --filterExpression "QD < 2.0 || FS > 60.0 || MQ < 40.0" --filterName "my_snp_filter" -o ${file}.filtered.vcf
+#Q20 filter
+	java -jar ../../../../../GATK/GenomeAnalysisTK.jar -T VariantFiltration -R ../../../../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta -V ${file}.filtered.vcf -G_filter "GQ < 20.0" -G_filterName lowGQ -o ${file}.Q20.vcf  
+done
+#covert to alignment file to make graphs
+cat only_filtered_snps_Q20.vcf | vcf-to-tab > snps.tab
+perl ../../../../../vcf_tab_to_fasta_alignment.pl --output_ref -i snps.tab > all_snps.fasta
+
+#machine learning variant selection for model organisms, don't use
+#java -jar ../../../../../GATK/GenomeAnalysisTK.jar -T VariantRecalibrator -R ../../../../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta -input combined.vcf -resource:hapmap,known=false,training=true,truth=true,prior=15.0 hapmap.vcf -resource:omni,known=false,training=true,truth=true,prior=12.9 omni.vcf -resource:1000G,known=false,training=true,truth=false,prior=10.0 1000G.vcf -resource:dbsnp,known=true,training=false,truth=false,prior=2.0 dbsnp.vcf -an DP -an QD -an FS -an SOR -an MQ -an MQRankSum -an ReadPosRankSum -an InbreedingCoeff -mode SNP -tranche 100.0 -tranche 99.9 -tranche -99.0 -tranche 99.0 -recalFile recalibrate_SNP.recal -tranchesFile recalibrate_SNP.recal -tranchesFile recalibrate_SNP.tranches -rscriptFile recalibrate_SNP_plots.R
+#java -jar ../../../../../GATK/GenomeAnalysisTK.jar -T ApplyRecalibration -R ../../../../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta -input combined.vcf -mode SNP --ts_filter_level 99.0 -recalFile recalibrate_SNP.recal -tranchesFile recalibrate_SNP.tranches -o recalibrated_snps_raw_indels.vcf
+
+#java -jar ../../../../../GATK/GenomeAnalysisTK.jar -T HaplotypeCaller -R ../../../../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta --sample_ploidy 1 -I 10_GRE1_C80GLANXX_TAGCTTAT_L001_.at.r1.trimmed.paired.fq.sorted.bam -I 11_GUA1_C80GLANXX_GGCTACAT_L001_.at.r1.trimmed.paired.fq.sorted.bam -I 12_GUA2_C80GLANXX_CTTGTAAT_L001_.at.r1.trimmed.paired.fq.sorted.bam -I 13_NZE2_C80GLANXX_AGTCAACA_L001_.at.r1.trimmed.paired.fq.sorted.bam -I 14_NZE8_C80GLANXX_AGTTCCGT_L001_.at.r1.trimmed.paired.fq.sorted.bam -I 15_RUS1_C80GLANXX_ATGTCAGA_L001_.at.r1.trimmed.paired.fq.sorted.bam -I 16_SAF4_C80GLANXX_CCGTCCCG_L001_.at.r1.trimmed.paired.fq.sorted.bam -I 17_SLV1_C80GLANXX_GTCCGCAC_L001_.at.r1.trimmed.paired.fq.sorted.bam -I 18_USA12_C80GLANXX_GTGAAACG_L001_.at.r1.trimmed.paired.fq.sorted.bam -I 1_ALP3_C80GLANXX_ATCACGAT_L001_.at.r1.trimmed.paired.fq.sorted.bam -I 2_AUS4_C80GLANXX_CGATGTAT_L001_.at.r1.trimmed.paired.fq.sorted.bam -I 3_BHU1_C80GLANXX_TTAGGCAT_L001_.at.r1.trimmed.paired.fq.sorted.bam -I 4_CAN3_C80GLANXX_TGACCAAT_L001_.at.r1.trimmed.paired.fq.sorted.bam -I 5_CHI17_C80GLANXX_ACAGTGAT_L001_.at.r1.trimmed.paired.fq.sorted.bam -I 6_COLN_C80GLANXX_GCCAATAT_L001_.at.r1.trimmed.paired.fq.sorted.bam -I 7_COLS_C80GLANXX_CAGATCAT_L001_.at.r1.trimmed.paired.fq.sorted.bam -I 8_DEN1_C80GLANXX_ACTTGAAT_L001_.at.r1.trimmed.paired.fq.sorted.bam -I 9_ECU13_C80GLANXX_GATCAGAT_L001_.at.r1.trimmed.paired.fq.sorted.bam -stand_call_conf 50.0 -stand_emit_conf 10.0 -o ../../../../raw.snps.indels.vcf

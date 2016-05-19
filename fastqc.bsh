@@ -1,0 +1,2 @@
+cd DPini
+fastqc SRR1205213_1.fastq -o fastqc

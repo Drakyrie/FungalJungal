@@ -1,0 +1,14 @@
+cd lengthsorted
+#for file in *_C
+for file in 11*_C
+do
+	cd $file	
+	cd K77
+	blastn -db ../../../../blastdb/nt -query unaligned_contigs.fasta -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore sscinames" -num_alignments 1 -out unaligned_contigs_allblast.out	
+	#blastn -db ../../../../blastdb/nt -query predicted_gene_seq.fasta -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore sscinames" -num_alignments 1 -out predicted_genes_allblast.out	
+	#blastn -db ../../../../blastdb/nt -query first_contig_fragments.fasta -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore sscinames" -num_alignments 1 -out fragment_allblast.out	
+	#blastn -db ../../../../blastdb/nt -query final_contigs.fasta -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qsscinames" -out allblast.out	
+	#blastn -db ../../../../dothiblastdb/Dothidb -query final_contigs.fasta -outfmt "6" -out results.out
+	cd ../../
+done
+

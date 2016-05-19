@@ -1,0 +1,17 @@
+cd DPini
+#fastq-mcf -o DPini.at.r1 -o DPini.at.r2 ../../contams_for_rev.fa SRR1205213_1.fastq SRR1205213_2.fastq 
+#SolexaQA++ dynamictrim -h 20 DPini.at.r1 DPini.at.r2
+#SolexaQA++ lengthsort -l 50 DPini.at.r1.trimmed DPini.at.r2.trimmed
+#bowtie2-build -f ../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta dothi
+#bowtie2 --sensitive --end-to-end -x dothi -1 DPini.at.r1.trimmed.paired.fq -2 DPini.at.r2.trimmed.paired.fq -U DPini.at.r1.trimmed.single.fq -S DPini.sam
+#samtools view -b -S DPini.sam -o DPini.bam
+#samtools sort DPini.bam DPini.bam.sorted
+#../../SPAdes-3.6.1-Linux/bin/spades.py -o denovo -1 DPini.at.r1.trimmed.paired.fq -2 DPini.at.r2.trimmed.paired.fq -s DPini.at.r1.trimmed.single.fq --careful -k 79,83,87,91,95,99 --only-assembler
+#bedtools genomecov -ibam DPini.bam -g ../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta > DPini.cov.hist
+	
+#bedtools coverage -a ../../../dothi_windows.bed -b $file > ../windowcov/${file}.windowcov
+#bedtools coverage -d -a ../../../../Dotse1_FrozenGeneCatalog2013_07_03_CDS_coordinates.bed -b $file > ../../../locicov/${file}.perbaselocicov	
+#bedtools coverage -d -a ../../../tubulin.bed -b $file > tubulinseq/${file}.perbaselocicov
+bowtie2 --local -x dothi -1 DPini.at.r1.trimmed.paired.fq -2 DPini.at.r2.trimmed.paired.fq -U DPini.at.r1.trimmed.single.fq -S DPini_not_sensitive.sam
+#bowtie2-build -f denovo/K99/unaligned_contigs.fasta DPini_unaligned
+#bowtie2 --sensitive --end-to-end -x DPini_unaligned -1 DPini.at.r1.trimmed.paired.fq -2 DPini.at.r2.trimmed.paired.fq -U DPini.at.r1.trimmed.single.fq -S DPini_unaligned.sam

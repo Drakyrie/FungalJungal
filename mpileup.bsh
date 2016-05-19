@@ -1,0 +1,13 @@
+cd mapped/bam/sorted/target_genes
+#cd lukas_genes
+for gene in *.txt
+do
+	mkdir ${gene:0:${#gene}-4}
+	cd ..
+	#cd ../mapped/bam/sorted	
+	for file in *.bam
+	do 
+		samtools mpileup -r $(head -n 1 target_genes/$gene) -f ../../../../Dotse1_AssemblyScaffolds_Repeatmasked.fasta $file -o target_genes/${gene:0:${#gene}-4}/${file}.seq > target_genes/${gene:0:${#gene}-4}/${file}.seq
+	done
+	cd target_genes
+done
